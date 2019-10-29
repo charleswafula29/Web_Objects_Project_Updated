@@ -1,11 +1,14 @@
 package com.example.project.controller;
 
 
+import com.example.project.models.Categories;
 import com.example.project.models.Movie;
+import com.example.project.models.Users;
 import com.example.project.repositories.MoviesRepository;
 import com.example.project.NotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -61,6 +64,23 @@ public class MoviesController {
         findmovie.setName(movies.getName());
         findmovie.setYearReleased(movies.getYearReleased());
         return moviesRepository.save(findmovie);
+    }
+
+    //create original movie
+    @PostMapping(value = "createoriginal")
+    public Movie createOriginalMovie(@RequestParam String category,
+                              @RequestParam String movieName,
+                              @RequestParam String yearReleased) {
+        HashSet<Categories> categories = new HashSet<>();
+        Categories catValues = new Categories();
+        catValues.setCategory_name(category);
+        categories.add(catValues);
+        Movie movies = new Movie();
+        movies.setCategories(categories);
+        movies.setName(movieName);
+        movies.setYearReleased(yearReleased);
+        movies.setType("Original");
+        return moviesRepository.save(movies);
     }
 
 
